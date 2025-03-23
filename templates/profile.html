@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile - GameOn</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans text-gray-900">
+
+  <header class="bg-blue-500 text-white p-4">
+    <div class="container mx-auto text-center">
+      <h1 class="text-4xl">Your Profile</h1>
+    </div>
+  </header>
+
+  <div class="container mx-auto mt-6">
+    <div class="bg-white p-6 shadow-md rounded-lg">
+      <h2 class="text-xl font-semibold mb-4">User Information</h2>
+      <p><strong>Username:</strong> {{ user.username }}</p>
+      <p><strong>Email:</strong> {{ user.email }}</p>
+      <a href="/logout" class="text-red-500 hover:underline">Logout</a>
+    </div>
+  </div>
+
+  <footer class="bg-blue-500 text-white p-4 mt-6">
+    <p class="text-center">© 2025 GameOn. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

@@ -1,20 +1,20 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
-app.config['SECRET_KEY'] = 'your_secret_key'
+app.config['SECRET_KEY'] = 'rafa2112'  # Change this to a secure random string
 db = SQLAlchemy(app)
 
-# Create the User model for the database
+# User model
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True, nullable=False)
     email = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(150), nullable=False)
 
-# Create the Game model for the database (optional, depending on your needs)
+# Game model (optional)
 class Game(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150), nullable=False)
@@ -26,10 +26,14 @@ class Game(db.Model):
 with app.app_context():
     db.create_all()
 
+# Home page (redirect to login if not logged in)
 @app.route('/')
 def index():
+    if 'user_id' not in session:  # If the user is not logged in, redirect to login
+        return redirect(url_for('login'))
     return render_template('index.html')
 
+# Games page (view available games)
 @app.route('/games')
 def games():
     game_list = [
@@ -38,10 +42,12 @@ def games():
     ]
     return render_template('games.html', games=game_list)
 
+# Create game page (create a new game)
 @app.route('/create-game')
 def create_game():
     return render_template('create_game.html')
 
+# Submit game data
 @app.route('/submit-game', methods=['POST'])
 def submit_game():
     game_name = request.form['gameName']
@@ -51,7 +57,7 @@ def submit_game():
     game_type = request.form['gameType']
     additional_notes = request.form['additionalNotes']
     
-    # Here you can save the data to the database or do further processing
+    # Create a new game and add to the database
     new_game = Game(name=game_name, location=location, date_time=date_time, available_spots=available_spots)
     db.session.add(new_game)
     db.session.commit()
@@ -59,6 +65,7 @@ def submit_game():
     flash("Game created successfully!", "success")
     return redirect(url_for('games'))
 
+# Account creation route (for new users)
 @app.route('/create-account', methods=['GET', 'POST'])
 def create_account():
     if request.method == 'POST':
@@ -75,7 +82,6 @@ def create_account():
         # Hash the password before storing it
         hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
 
-
         # Create a new user and add to the database
         new_user = User(username=username, email=email, password=hashed_password)
         db.session.add(new_user)
@@ -86,6 +92,7 @@ def create_account():
 
     return render_template('create_account.html')
 
+# Login route (for existing users)
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -95,6 +102,7 @@ def login():
         user = User.query.filter_by(email=email).first()
         
         if user and check_password_hash(user.password, password):
+            session['user_id'] = user.id  # Store user ID in session
             flash('Logged in successfully!', 'success')
             return redirect(url_for('index'))
         else:
@@ -102,5 +110,22 @@ def login():
     
     return render_template('login.html')
 
+# Logout route (clear session and redirect to home page)
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)  # Remove user from session
+    flash('You have been logged out.', 'success')
+    return redirect(url_for('index'))
+
+# Profile page route (only accessible when logged in)
+@app.route('/profile')
+def profile():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))  # Redirect to login if not logged in
+    
+    user = User.query.get(session['user_id'])  # Get the logged-in user from the database
+    return render_template('profile.html', user=user)
+
+# Run the Flask app
 if __name__ == '__main__':
     app.run(debug=True)
