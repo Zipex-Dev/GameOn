@@ -1,11 +1,15 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_migrate import Migrate
+
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
-app.config['SECRET_KEY'] = 'rafa2112'  # Change this to a secure random string
+app.config['SECRET_KEY'] = 'rafa2112'
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 # User model
 class User(db.Model):
@@ -14,13 +18,16 @@ class User(db.Model):
     email = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(150), nullable=False)
 
-# Game model (optional)
+# Game model
 class Game(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150), nullable=False)
     location = db.Column(db.String(150), nullable=False)
     date_time = db.Column(db.String(50), nullable=False)
     available_spots = db.Column(db.Integer, nullable=False)
+    game_type = db.Column(db.String(50), nullable=False)  # Ensure this column exists
+    additional_notes = db.Column(db.Text, nullable=True)
+
 
 # Initialize the database
 with app.app_context():
@@ -33,23 +40,18 @@ def index():
         return redirect(url_for('login'))
     return render_template('index.html')
 
-# Games page (view available games)
-@app.route('/games')
-def games():
-    game_list = [
-        {'name': 'Basketball Game', 'location': 'Sports Field 1', 'date_time': '2025-03-25 16:00', 'available_spots': 5},
-        {'name': 'Soccer Match', 'location': 'Indoor Arena 3', 'date_time': '2025-03-26 18:00', 'available_spots': 8}
-    ]
-    return render_template('games.html', games=game_list)
-
-# Create game page (create a new game)
+# Create game page (render create game form)
 @app.route('/create-game')
 def create_game():
     return render_template('create_game.html')
 
-# Submit game data
+# Submit game data to the database
 @app.route('/submit-game', methods=['POST'])
 def submit_game():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))  # Redirect to login if not logged in
+    
+    # Get the data from the form
     game_name = request.form['gameName']
     location = request.form['location']
     date_time = request.form['dateTime']
@@ -58,12 +60,25 @@ def submit_game():
     additional_notes = request.form['additionalNotes']
     
     # Create a new game and add to the database
-    new_game = Game(name=game_name, location=location, date_time=date_time, available_spots=available_spots)
+    new_game = Game(
+        name=game_name,
+        location=location,
+        date_time=date_time,
+        available_spots=available_spots,
+        game_type=game_type,
+        additional_notes=additional_notes
+    )
     db.session.add(new_game)
     db.session.commit()
     
     flash("Game created successfully!", "success")
     return redirect(url_for('games'))
+
+# Games page (view available games)
+@app.route('/games')
+def games():
+    game_list = Game.query.all()  # Get all games from the database
+    return render_template('games.html', games=game_list)
 
 # Account creation route (for new users)
 @app.route('/create-account', methods=['GET', 'POST'])
