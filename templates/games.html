@@ -10,25 +10,21 @@
   <header class="bg-blue-500 text-white p-4">
     <div class="container mx-auto text-center">
       <h1 class="text-4xl">Available Games</h1>
-      <p class="mt-2">Join a game or view game details.</p>
+      <p class="mt-2">Join a game or create your own!</p>
     </div>
   </header>
 
   <div class="container mx-auto mt-6">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-      {% if games %}
-        {% for game in games %}
-          <div class="bg-white p-6 shadow-md rounded-lg">
-            <h2 class="text-xl font-semibold mb-4">{{ game.name }}</h2>
-            <p class="mb-4">Location: {{ game.location }}</p>
-            <p class="mb-4">Date and Time: {{ game.date_time }}</p>
-            <p class="mb-4">Available Spots: {{ game.available_spots }}</p>
-            <a href="#" class="text-blue-500 hover:underline">Join Game</a>
-          </div>
-        {% endfor %}
-      {% else %}
-        <p class="text-center text-xl">No games available at the moment.</p>
-      {% endif %}
+      {% for game in games %}
+        <div class="bg-white p-6 shadow-md rounded-lg">
+          <h2 class="text-xl font-semibold mb-4">{{ game.name }}</h2>
+          <p class="mb-4">Location: {{ game.location }}</p>
+          <p class="mb-4">Date and Time: {{ game.date_time }}</p>
+          <p class="mb-4">Available Spots: {{ game.available_spots }}</p>
+          <a href="#" class="text-blue-500 hover:underline">Join Game</a>
+        </div>
+      {% endfor %}
     </div>
   </div>
 
