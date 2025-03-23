@@ -7,29 +7,34 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100 font-sans text-gray-900">
-  <header class="bg-blue-500 text-white p-4">
+
+  <!-- Header -->
+  <header class="bg-blue-600 text-white p-6">
     <div class="container mx-auto text-center">
-      <h1 class="text-4xl">Available Games</h1>
-      <p class="mt-2">Join a game or create your own!</p>
+      <h1 class="text-4xl font-bold">Available Games</h1>
+      <p class="mt-2 text-lg">Join or create a game easily!</p>
     </div>
   </header>
 
-  <div class="container mx-auto mt-6">
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+  <!-- Game Listings -->
+  <main class="container mx-auto mt-6 px-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
       {% for game in games %}
-        <div class="bg-white p-6 shadow-md rounded-lg">
-          <h2 class="text-xl font-semibold mb-4">{{ game.name }}</h2>
-          <p class="mb-4">Location: {{ game.location }}</p>
-          <p class="mb-4">Date and Time: {{ game.date_time }}</p>
-          <p class="mb-4">Available Spots: {{ game.available_spots }}</p>
-          <a href="#" class="text-blue-500 hover:underline">Join Game</a>
+        <div class="bg-white p-6 shadow-md rounded-lg hover:shadow-xl transition-all duration-300">
+          <h2 class="text-2xl font-semibold mb-4">{{ game.name }}</h2>
+          <p class="text-gray-600 mb-4">Location: {{ game.location }}</p>
+          <p class="text-gray-600 mb-4">Date and Time: {{ game.date_time }}</p>
+          <p class="text-gray-600 mb-4">Available Spots: {{ game.available_spots }}</p>
+          <a href="#" class="text-blue-500 hover:underline text-lg">Join Game</a>
         </div>
       {% endfor %}
     </div>
-  </div>
+  </main>
 
-  <footer class="bg-blue-500 text-white p-4 mt-6">
+  <!-- Footer -->
+  <footer class="bg-blue-600 text-white p-4 mt-6">
     <p class="text-center">© 2025 GameOn. All rights reserved.</p>
   </footer>
+
 </body>
 </html>

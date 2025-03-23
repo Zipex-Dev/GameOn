@@ -8,36 +8,44 @@
 </head>
 <body class="bg-gray-100 font-sans text-gray-900">
 
-  <header class="bg-blue-500 text-white p-4">
+  <!-- Header -->
+  <header class="bg-blue-600 text-white p-6">
     <div class="container mx-auto text-center">
-      <h1 class="text-4xl">Create a New Game</h1>
-      <p class="mt-2">Host a new sports game and invite others to join!</p>
+      <h1 class="text-4xl font-bold">Create a New Game</h1>
+      <p class="mt-2 text-lg">Host your own sports game and invite others to join!</p>
     </div>
   </header>
 
-  <div class="container mx-auto mt-6">
-    <form action="/submit-game" method="POST" class="bg-white p-6 shadow-md rounded-lg">
-      <div class="mb-4">
+  <!-- Game Creation Form -->
+  <main class="container mx-auto mt-6 px-4">
+    <form action="/submit-game" method="POST" class="bg-white p-6 shadow-md rounded-lg space-y-6">
+      
+      <!-- Game Name -->
+      <div>
         <label for="gameName" class="block text-sm font-medium text-gray-700">Game Name</label>
         <input type="text" name="gameName" id="gameName" class="w-full p-3 border border-gray-300 rounded-md" required>
       </div>
 
-      <div class="mb-4">
+      <!-- Location -->
+      <div>
         <label for="location" class="block text-sm font-medium text-gray-700">Location</label>
         <input type="text" name="location" id="location" class="w-full p-3 border border-gray-300 rounded-md" required>
       </div>
 
-      <div class="mb-4">
+      <!-- Date and Time -->
+      <div>
         <label for="dateTime" class="block text-sm font-medium text-gray-700">Date and Time</label>
         <input type="datetime-local" name="dateTime" id="dateTime" class="w-full p-3 border border-gray-300 rounded-md" required>
       </div>
 
-      <div class="mb-4">
+      <!-- Available Spots -->
+      <div>
         <label for="availableSpots" class="block text-sm font-medium text-gray-700">Available Spots</label>
         <input type="number" name="availableSpots" id="availableSpots" class="w-full p-3 border border-gray-300 rounded-md" required>
       </div>
 
-      <div class="mb-4">
+      <!-- Game Type -->
+      <div>
         <label for="gameType" class="block text-sm font-medium text-gray-700">Game Type</label>
         <select name="gameType" id="gameType" class="w-full p-3 border border-gray-300 rounded-md" required>
           <option value="public">Public</option>
@@ -45,18 +53,21 @@
         </select>
       </div>
 
-      <div class="mb-4">
+      <!-- Additional Notes -->
+      <div>
         <label for="additionalNotes" class="block text-sm font-medium text-gray-700">Additional Notes</label>
         <textarea name="additionalNotes" id="additionalNotes" class="w-full p-3 border border-gray-300 rounded-md" rows="4"></textarea>
       </div>
 
+      <!-- Submit Button -->
       <div class="text-center">
-        <button type="submit" class="bg-blue-500 text-white px-6 py-3 rounded-lg">Create Game</button>
+        <button type="submit" class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-all duration-300">Create Game</button>
       </div>
     </form>
-  </div>
+  </main>
 
-  <footer class="bg-blue-500 text-white p-4 mt-6">
+  <!-- Footer -->
+  <footer class="bg-blue-600 text-white p-4 mt-6">
     <p class="text-center">© 2025 GameOn. All rights reserved.</p>
   </footer>
 

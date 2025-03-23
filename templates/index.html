@@ -7,36 +7,47 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100 font-sans text-gray-900">
-  <header class="bg-blue-500 text-white p-4">
+
+  <!-- Header -->
+  <header class="bg-blue-600 text-white p-6">
     <div class="container mx-auto text-center">
-      <h1 class="text-4xl">Welcome to GameOn</h1>
-      <p class="mt-2">Find, Create, and Join sports games easily!</p>
+      <h1 class="text-4xl font-bold">Welcome to GameOn</h1>
+      <p class="mt-2 text-lg">Find, Create, and Join football games easily!</p>
     </div>
   </header>
 
-  <div class="container mx-auto mt-6">
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-      <!-- Cards for games or actions here -->
-      <div class="bg-white p-6 shadow-md rounded-lg">
-        <h2 class="text-xl font-semibold mb-4">Join a Game</h2>
-        <p class="mb-4">Find available games in your area.</p>
-        <a href="/games" class="text-blue-500 hover:underline">Explore Games</a>
+  <!-- Main Content -->
+  <main class="container mx-auto mt-6 px-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      
+      <!-- Join Game Card -->
+      <div class="bg-white p-6 shadow-md rounded-lg hover:shadow-xl transition-all duration-300">
+        <h2 class="text-2xl font-semibold mb-4">Join a Game</h2>
+        <p class="mb-4 text-gray-600">Find and join games in your area with just a few clicks.</p>
+        <a href="/games" class="text-blue-500 hover:underline text-lg">Explore Games</a>
       </div>
-      <div class="bg-white p-6 shadow-md rounded-lg">
-        <h2 class="text-xl font-semibold mb-4">Create a Game</h2>
-        <p class="mb-4">Host a new sports game and invite others to join!</p>
-        <a href="/create-game" class="text-blue-500 hover:underline">Create Game</a>
+
+      <!-- Create Game Card -->
+      <div class="bg-white p-6 shadow-md rounded-lg hover:shadow-xl transition-all duration-300">
+        <h2 class="text-2xl font-semibold mb-4">Create a Game</h2>
+        <p class="mb-4 text-gray-600">Host your own football game and invite others to join!</p>
+        <a href="/create-game" class="text-blue-500 hover:underline text-lg">Create Game</a>
       </div>
-      <div class="bg-white p-6 shadow-md rounded-lg">
-        <h2 class="text-xl font-semibold mb-4">Your Profile</h2>
-        <p class="mb-4">View and edit your profile information.</p>
-        <a href="/profile" class="text-blue-500 hover:underline">Go to Profile</a>
+
+      <!-- Your Profile Card -->
+      <div class="bg-white p-6 shadow-md rounded-lg hover:shadow-xl transition-all duration-300">
+        <h2 class="text-2xl font-semibold mb-4">Your Profile</h2>
+        <p class="mb-4 text-gray-600">Manage your profile and keep track of your games.</p>
+        <a href="/profile" class="text-blue-500 hover:underline text-lg">Go to Profile</a>
       </div>
+
     </div>
-  </div>
-  
-  <footer class="bg-blue-500 text-white p-4 mt-6">
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-blue-600 text-white p-4 mt-6">
     <p class="text-center">© 2025 GameOn. All rights reserved.</p>
   </footer>
+
 </body>
 </html>
