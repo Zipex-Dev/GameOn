@@ -3,8 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_migrate import Migrate
 
-
-
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SECRET_KEY'] = 'rafa2112'
@@ -27,6 +25,16 @@ class Game(db.Model):
     available_spots = db.Column(db.Integer, nullable=False)
     game_type = db.Column(db.String(50), nullable=False)  # Ensure this column exists
     additional_notes = db.Column(db.Text, nullable=True)
+
+# JoinRequest model
+class JoinRequest(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # User requesting to join
+    game_id = db.Column(db.Integer, db.ForeignKey('game.id'), nullable=False)  # Game they want to join
+    status = db.Column(db.String(50), nullable=False, default="pending")  # Request status (e.g., pending, approved)
+
+    user = db.relationship('User', backref=db.backref('join_requests', lazy=True))
+    game = db.relationship('Game', backref=db.backref('join_requests', lazy=True))
 
 
 # Initialize the database
@@ -140,6 +148,39 @@ def profile():
     
     user = User.query.get(session['user_id'])  # Get the logged-in user from the database
     return render_template('profile.html', user=user)
+
+# Join game route (for public games)
+@app.route('/join-game/<int:game_id>', methods=['POST'])
+def join_game(game_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))  # Redirect to login if not logged in
+    
+    game = Game.query.get(game_id)
+    if game and game.game_type == 'public':
+        # Directly join the public game
+        flash("You have joined the game!", "success")
+        return redirect(url_for('games'))
+    else:
+        flash("This game is private. Please send a join request.", "warning")
+        return redirect(url_for('games'))
+
+# Join request route (for private games)
+@app.route('/request-join/<int:game_id>', methods=['POST'])
+def request_join(game_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))  # Redirect to login if not logged in
+
+    game = Game.query.get(game_id)
+    if game and game.game_type == 'private':
+        user_id = session['user_id']
+        join_request = JoinRequest(user_id=user_id, game_id=game.id)
+        db.session.add(join_request)
+        db.session.commit()
+        flash("Your request to join the game has been sent!", "success")
+        return redirect(url_for('games'))
+    else:
+        flash("This game doesn't exist or is not private.", "danger")
+        return redirect(url_for('games'))
 
 # Run the Flask app
 if __name__ == '__main__':
